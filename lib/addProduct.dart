@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProductPage extends StatefulWidget {
   @override
@@ -14,6 +15,54 @@ class _AddProductPageState extends State<AddProductPage> {
   TextEditingController cityController = TextEditingController();
 
   List<File> images = [];
+
+  final picker = ImagePicker(); // Add this
+
+  Future<void> _getImage() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Photo Library'),
+                onTap: () async {
+                  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      images.add(File(pickedFile.path));
+                    });
+                  } else {
+                    print('No image selected.');
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera),
+                title: Text('Camera'),
+                onTap: () async {
+                  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      images.add(File(pickedFile.path));
+                    });
+                  } else {
+                    print('No image selected.');
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +79,11 @@ class _AddProductPageState extends State<AddProductPage> {
               decoration: InputDecoration(labelText: 'Product Title'),
             ),
             SizedBox(height: 20),
+
             ElevatedButton.icon(
               icon: Icon(Icons.add_a_photo),
               label: Text("Add Images"),
-              onPressed: () async {
-                // Handle image selection and add to images list
-                // For now, this is a placeholder. You might use image_picker or other plugins.
-              },
+              onPressed: _getImage, // Use the function we just created
             ),
             Wrap(
               spacing: 8,

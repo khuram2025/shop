@@ -26,8 +26,12 @@ class CustomBottomBar extends StatelessWidget {
             icon: Icons.list,
             label: 'Products',
             isSelected: currentIndex == 1,
-            onTap: () => onTap(1),
+            onTap: () {
+              onTap(1);
+              Navigator.pushNamed(context, '/productListView');
+            },
           ),
+
           _centerAddButton(context),
           IconButtonWithText(
             icon: Icons.shop,
