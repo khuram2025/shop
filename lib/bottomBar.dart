@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled4/addProduct.dart';
+import 'package:untitled4/screens/profileScreen.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
@@ -43,8 +44,17 @@ class CustomBottomBar extends StatelessWidget {
             icon: Icons.settings,
             label: 'Settings',
             isSelected: currentIndex == 4,
-            onTap: () => onTap(4),
+            onTap: () {
+              if(currentIndex != 4) { // Check to prevent navigating if already on the ProfileScreen
+                onTap(4);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
+              }
+            },
           ),
+
         ],
       ),
     );
