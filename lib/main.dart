@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:untitled4/ProductDetails.dart';
+import 'package:untitled4/appBar.dart';
 import 'package:untitled4/bottomBar.dart';
+import 'package:untitled4/models.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,7 +56,7 @@ class _ProductListViewState extends State<ProductListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Product List View')),
+      appBar: CustomAppBar(),
       bottomNavigationBar: CustomBottomBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -124,9 +127,17 @@ class _ProductListViewState extends State<ProductListView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailPage(product: products[index]),
+                        builder: (context) => ProductDetailPage(
+                          product: products[index],
+                          review: Review(
+                            imageUrl: 'https://via.placeholder.com/150',
+                            title: 'Sample Review for ${products[index].title}',
+                            rating: 4,
+                          ), // This is a dummy review. Fetch the actual review if you have it.
+                        ),
                       ),
                     );
+
                   },
                   child: Card(
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -139,8 +150,8 @@ class _ProductListViewState extends State<ProductListView> {
                           Image.network(
                             products[index].imageUrl,
                             width: 150,
-                            height: 100,
-                            fit: BoxFit.cover,
+                            height: 150,
+                            fit: BoxFit.fill,
                           ),
                           SizedBox(width: 10),
                           Column(
@@ -176,82 +187,10 @@ class _ProductListViewState extends State<ProductListView> {
   }
 }
 
-
-class ProductDetailPage extends StatelessWidget {
-  final Product product;
-
-  ProductDetailPage({required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(product.title),
-        backgroundColor: Colors.blue,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.network(
-                product.imageUrl,
-                height: 250,
-                width: 250,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              product.title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.star, color: Colors.yellow, size: 24),
-                Icon(Icons.star, color: Colors.yellow, size: 24),
-                Icon(Icons.star, color: Colors.yellow, size: 24),
-                Icon(Icons.star, color: Colors.yellow, size: 24),
-                Icon(Icons.star_border, color: Colors.grey, size: 24),
-                SizedBox(width: 10),
-                Text('(24 reviews)'),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Description',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'This is a detailed description of the product. Here you can provide more comprehensive information about the product\'s features, uses, and any other relevant details.',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Product {
-  final String imageUrl;
-  final String title;
-  final int rating;
-  final String location;
-  final String addedSince;
-
-  Product({
-    required this.imageUrl,
-    required this.title,
-    required this.rating,
-    required this.location,
-    required this.addedSince,
-  });
-}
-
 void _showFilterOptions(BuildContext context) {
+  List<String> selectedCategories = [];
+  final List<String> categories = AppData.categories;
+
   showModalBottomSheet(
     context: context,
     shape: RoundedRectangleBorder(
@@ -261,25 +200,74 @@ void _showFilterOptions(BuildContext context) {
       ),
     ),
     builder: (BuildContext context) {
-      return Container(
-        height: 500,
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text('Option 1'),
-              onTap: () {
-                // Handle option 1 tap
-              },
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Container(
+            padding: EdgeInsets.all(16.0),
+            height: 500,
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Filters",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green[700]),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      hint: Text('Select Categories'),
+                      isExpanded: true,
+                      items: categories.map((String category) {
+                        return DropdownMenuItem<String>(
+                          value: category,
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: selectedCategories.contains(category),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedCategories.add(category);
+                                    } else {
+                                      selectedCategories.remove(category);
+                                    }
+                                  });
+                                },
+                              ),
+                              Text(category),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        // Do not change the state here as it's handled by the checkbox
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                // ... (Rest of the widgets like price and ratings)
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle filter application
+                  },
+                  child: Text('Apply Filters'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    onPrimary: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            ListTile(
-              title: Text('Option 2'),
-              onTap: () {
-                // Handle option 2 tap
-              },
-            ),
-            // Add more options as needed
-          ],
-        ),
+          );
+        },
       );
     },
   );

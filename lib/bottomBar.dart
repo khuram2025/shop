@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled4/addProduct.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
@@ -27,7 +28,7 @@ class CustomBottomBar extends StatelessWidget {
             isSelected: currentIndex == 1,
             onTap: () => onTap(1),
           ),
-          _centerAddButton(),
+          _centerAddButton(context),
           IconButtonWithText(
             icon: Icons.shop,
             label: 'Shops',
@@ -45,7 +46,7 @@ class CustomBottomBar extends StatelessWidget {
     );
   }
 
-  Widget _centerAddButton() {
+  Widget _centerAddButton(BuildContext context) {  // Add BuildContext as a parameter
     return Container(
       width: 60,
       height: 60,
@@ -57,12 +58,18 @@ class CustomBottomBar extends StatelessWidget {
       child: FittedBox(
         child: FloatingActionButton(
           backgroundColor: Colors.green,
-          onPressed: () => onTap(2),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddProductPage()),
+            );
+          },
           child: Icon(Icons.add, color: Colors.white),
         ),
       ),
     );
   }
+
 }
 
 class IconButtonWithText extends StatelessWidget {
