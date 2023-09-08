@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled4/addProduct.dart';
+import 'package:untitled4/screens/animalDetail.dart';
 import 'package:untitled4/screens/profileScreen.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -38,8 +39,17 @@ class CustomBottomBar extends StatelessWidget {
             icon: Icons.shop,
             label: 'Shops',
             isSelected: currentIndex == 3,
-            onTap: () => onTap(3),
+            onTap: () {
+              // Update the currentIndex if needed
+              onTap(3);
+              // Navigate to AnimalDetailPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AnimalDetailPage()),
+              );
+            },
           ),
+
           IconButtonWithText(
             icon: Icons.settings,
             label: 'Settings',

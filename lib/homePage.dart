@@ -10,6 +10,7 @@ import 'package:untitled4/widgets/searchBar.dart';
 // ... other imports ...
 
 class HomePage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<Product> products = List.generate(
     5,
         (index) => Product(
@@ -24,7 +25,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(scaffoldKey: _scaffoldKey, title: "HomePage"),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  CustomAppBar({this.title = 'Channab'});  // Default title set to 'Channab'
+  CustomAppBar({this.title = 'Channab', required this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: Icon(Icons.menu, color: Colors.black),
         onPressed: () {
-          // Handle menu button press
+          scaffoldKey.currentState?.openDrawer();
         },
       ),
       actions: [
@@ -27,7 +28,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Handle notification button press
           },
         ),
-
         SizedBox(width: 10)  // Some spacing if required
       ],
     );

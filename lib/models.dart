@@ -14,6 +14,21 @@ class Product {
     required this.addedSince,
   });
 }
+class FamilyMember {
+  final String title;
+  final String imageUrl;
+  final int rating;
+  final String location;
+  final String addedSince;
+
+  FamilyMember({
+    required this.title,
+    required this.imageUrl,
+    required this.rating,
+    required this.location,
+    required this.addedSince,
+  });
+}
 
 class AppData {
   static final List<String> categories = [
