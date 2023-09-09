@@ -5,6 +5,7 @@ import 'package:untitled4/models.dart';
 import 'package:untitled4/productList.dart';
 import 'package:untitled4/widgets/banner.dart';
 import 'package:untitled4/widgets/categgoryCard.dart';
+import 'package:untitled4/widgets/drawer.dart';
 import 'package:untitled4/widgets/productListCard.dart';
 import 'package:untitled4/widgets/searchBar.dart';
 // ... other imports ...
@@ -27,6 +28,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: _scaffoldKey, title: "HomePage"),
+      drawer: MainDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -3,6 +3,7 @@ import 'package:untitled4/ProductDetails.dart';
 import 'package:untitled4/appBar.dart';
 import 'package:untitled4/bottomBar.dart';
 import 'package:untitled4/models.dart';
+import 'package:untitled4/widgets/drawer.dart';
 import 'package:untitled4/widgets/productListCard.dart';
 
 class ProductListView extends StatefulWidget {
@@ -45,6 +46,8 @@ class _ProductListViewState extends State<ProductListView> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: _scaffoldKey, title: "Items List"),
+
+      drawer: MainDrawer(),
 
       body: Column(
         children: [
