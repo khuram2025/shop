@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../main.dart';
+import '../../services/SharedPreferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -47,10 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
       final data = json.decode(response.body);
       final token = data['token'];
 
-      // TODO: Save the token securely
+      // Save the token securely
+      await AuthService.saveTokenToPrefs(token);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful! Token: $token')),
       );
+
       // Navigate to MainScreen
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainScreen()));
     } else {
@@ -61,6 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

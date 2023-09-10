@@ -2,12 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:untitled4/bottomBar.dart';
 import 'package:untitled4/homePage.dart';
 import 'package:untitled4/productList.dart';
+import 'package:untitled4/services/SharedPreferences.dart';
 
 import 'screens/authetication/login.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isUserLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoggedInStatus();
+  }
+
+  _checkLoggedInStatus() async {
+    bool isLoggedIn = await AuthService.isUserLoggedIn();
+    setState(() {
+      _isUserLoggedIn = isLoggedIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,9 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Color(0xFFF5F5F5),
       ),
-      // home: MainScreen(),
-        home: LoginScreen(),
-
+      home: _isUserLoggedIn ? MainScreen() : LoginScreen(),
     );
   }
 }

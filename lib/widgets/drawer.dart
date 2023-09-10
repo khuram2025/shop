@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:untitled4/screens/ExpensePage.dart';
 import 'package:untitled4/screens/MilkingSummary.dart';
+import 'package:http/http.dart' as http;
+
 
 import '../screens/FinancePage.dart';
 import '../screens/IncomePage.dart';
+import '../screens/authetication/login.dart';
+import '../services/SharedPreferences.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
+
+  bool isLoggedIn() {
+    // Replace this with actual logic to check if the user is logged in
+    return true; // For demonstration purposes, this always returns true.
+  }
+
+  Future<void> logoutUser(BuildContext context) async {
+    final url = 'http://10.30.0.76/accounts/api/logout/';
+
+    try {
+      final response = await http.post(Uri.parse(url)); // Assuming you have imported the http package
+
+      if (response.statusCode == 200) {
+        // Remove the token from SharedPreferences and navigate to login screen
+        await AuthService.removeTokenFromPrefs();
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error logging out')),
+        );
+      }
+    } catch (error) {
+      print('Error making the request: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Network error: $error')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +175,28 @@ class MainDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          Container(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: ListTile(
+                leading: Icon(isLoggedIn() ? Icons.logout : Icons.login),
+                title: Text(isLoggedIn() ? 'Logout' : 'Login'),
+                onTap: () {
+                  if (isLoggedIn()) {
+                    logoutUser(context); // Calling the logout function
+                  } else {
+                    // Navigate to the login page
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  }
+                },
+              ),
+
+            ),
+          ),
+
         ],
       ),
     );
