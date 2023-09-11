@@ -8,6 +8,8 @@ import 'package:untitled4/widgets/categgoryCard.dart';
 import 'package:untitled4/widgets/drawer.dart';
 import 'package:untitled4/widgets/productListCard.dart';
 import 'package:untitled4/widgets/searchBar.dart';
+
+import 'screens/AnimalListPage.dart';
 // ... other imports ...
 
 class HomePage extends StatelessWidget {
@@ -36,7 +38,8 @@ class HomePage extends StatelessWidget {
             BannerCard(),
             SizedBox(height:10),
             CategoryCard(),
-            ...products.map((product) => ProductListCard(product: product)).toList(),
+            AnimalsListPage(),
+
           ],
         ),
       ),
@@ -50,4 +53,4 @@ class HomePage extends StatelessWidget {
 
 }
 
-void main() => runApp(MaterialApp(home: HomePage()));
+
